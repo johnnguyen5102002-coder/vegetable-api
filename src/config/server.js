@@ -1,5 +1,6 @@
 import express from "express";
-import { CONNECT_DB, GET_DB } from "./mongodb.js";
+import exitHook from "async-exit-hook";
+import { CONNECT_DB, GET_DB, CLOSE_DB } from "./mongodb.js";
 
 const START_SERVER = () => {
   const app = express();
@@ -10,13 +11,20 @@ const START_SERVER = () => {
   });
 
   app.listen(port, () => {
-    console.log(`Example app listening on port http://localhost:${port}`);
+    console.log(`3. Example app listening on port http://localhost:${port}`);
+  });
+
+  exitHook(() => {
+    console.log("4. Disconecting from MongoDB Atlas....");
+    CLOSE_DB();
+    console.log("5. Disconected from MongoDB Atlas!");
   });
 };
 
 CONNECT_DB()
-  .then(() => console.log("connect to DB"))
+  .then(() => console.log("1. Connecting to MongoDB Atlas...."))
   .then(() => START_SERVER())
+  .then(() => console.log("2. Connected to MongoDB Atlas!"))
   .catch((error) => {
     console.log(error);
     process.exit(0);

@@ -26,7 +26,10 @@ export const CONNECT_DB = async () => {
 export const GET_DB = () => {
   if (!vegetableDatabaseInstance) {
     throw new Error("Must connect to database first? ");
-
-    return vegetableDatabaseInstance;
   }
+  return vegetableDatabaseInstance;
+};
+
+export const CLOSE_DB = async () => {
+  await client.close();
 };
